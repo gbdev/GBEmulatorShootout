@@ -36,7 +36,34 @@ class Emulator:
         return p.poll() is None
 
     def processOutput(self, p):
+        outputs = []
+        for stream in (getattr(p, "stdout", None), getattr(p, "stderr", None)):
+            if stream is None or stream.closed:
+                continue
+            try:
+                data = stream.read()
+            except Exception:
+                continue
+            if not data:
+                continue
+            if isinstance(data, bytes):
+                data = data.decode("utf-8", errors="replace")
+            data = data.strip()
+            if data:
+                outputs.append(data)
+        if outputs:
+            return "\n".join(outputs)
         return p.poll()
+
+    def crashDetails(self, p):
+        details = []
+        returncode = self.returncode(p)
+        if returncode is not None:
+            details.append("exit: %d" % (returncode))
+        output = self.processOutput(p)
+        if isinstance(output, str) and output:
+            details.append("output: %s" % (output))
+        return ", ".join(details) if details else "no diagnostics"
 
     def endProcess(self, p):
         p.terminate()
@@ -61,7 +88,7 @@ class Emulator:
         process_create_time = time.monotonic()
         while not self.isWindowOpen():
             time.sleep(0.01)
-            assert self.isProcessAlive(p), "Process crashed?"
+            assert self.isProcessAlive(p), "Process crashed? (%s)" % (self.crashDetails(p))
             assert time.monotonic() - process_create_time < 30.0, "Creating the window took longer then 30 seconds?"
         process_create_time = time.monotonic() - process_create_time
         self.postWindowCreation()
@@ -76,7 +103,7 @@ class Emulator:
                 if result is not None:
                     print("Early exit: %s: %g" % (result, time.monotonic() - start_time))
                     break
-            assert self.isProcessAlive(p), "Process crashed? (exit: %d)" % (self.returncode(p))
+            assert self.isProcessAlive(p), "Process crashed? (%s)" % (self.crashDetails(p))
         self.endProcess(p)
         if result is None:
             result = test.getDefaultResult()
@@ -88,7 +115,7 @@ class Emulator:
             return None
         while not self.isWindowOpen():
             time.sleep(0.01)
-            assert self.isProcessAlive(p), "Process crashed?"
+            assert self.isProcessAlive(p), "Process crashed? (%s)" % (self.crashDetails(p))
         time.sleep(self.startup_time)
         start = time.monotonic()
         last_change = time.monotonic()
@@ -101,7 +128,7 @@ class Emulator:
             prev = screenshot
             if time.monotonic() - last_change > 10.0:
                 break
-            assert self.isProcessAlive(p), "Process crashed? (exit: %d)" % (self.returncode(p))
+            assert self.isProcessAlive(p), "Process crashed? (%s)" % (self.crashDetails(p))
         if not os.path.exists(test.pass_result_filename):
             screenshot.save(test.pass_result_filename)
         self.endProcess(p)

@@ -89,4 +89,10 @@ EMU_TYPE = %d
         if model is None:
             return None
         self._write_kigb_config(rom, model=model)
-        return subprocess.Popen(["emu/kigb/kigb.exe", os.path.abspath(rom)], cwd="emu/kigb")
+        return subprocess.Popen(
+            ["emu/kigb/kigb.exe", os.path.abspath(rom)],
+            cwd="emu/kigb",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
