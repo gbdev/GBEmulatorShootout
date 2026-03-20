@@ -23,7 +23,7 @@ class VBA(Emulator):
 
 class VBAM(Emulator):
     def __init__(self):
-        super().__init__("VisualBoyAdvance-M", "https://vba-m.com/", startup_time=1.0)
+        super().__init__("VisualBoyAdvance-M", "https://github.com/visualboyadvance-m/visualboyadvance-m", startup_time=1.0)
         self.title_check = lambda title: "VisualBoyAdvance-M" in title
 
     def setup(self):

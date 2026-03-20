@@ -6,12 +6,12 @@ import PIL.Image
 
 class Emmy(Emulator):
     def __init__(self):
-        super().__init__("Emmy", "https://emmy-gbc.vercel.app/", startup_time=0.5)
+        super().__init__("Emmy", "https://emmy.n1ark.com/", startup_time=0.5)
 
     def setup(self):
         # requires: chormedriver (https://sites.google.com/chromium.org/driver/)
         self.driver = webdriver.Chrome()
-        self.driver.get("https://emmy-gbc.vercel.app/")
+        self.driver.get("https://emmy.n1ark.com/")
         self.driver.find_element(value="emu-speed").click()
         self.driver.find_element(value="drawer-section-settings").click()
 
