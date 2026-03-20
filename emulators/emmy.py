@@ -2,18 +2,45 @@ from util import *
 from emulator import Emulator
 from test import *
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 import PIL.Image
 
 class Emmy(Emulator):
     def __init__(self):
         super().__init__("Emmy", "https://emmy.n1ark.com/", startup_time=0.5)
+        self.wait_timeout = 10.0
+
+    def _wait(self, condition, *, timeout=None):
+        return WebDriverWait(self.driver, timeout or self.wait_timeout).until(condition)
+
+    def _find_now(self, element_id):
+        try:
+            return self.driver.find_element(By.ID, element_id)
+        except Exception:
+            return None
+
+    def _wait_for_id(self, element_id, *, clickable=False, timeout=None):
+        condition = EC.element_to_be_clickable if clickable else EC.presence_of_element_located
+        return self._wait(condition((By.ID, element_id)), timeout=timeout)
+
+    def _ensure_settings_open(self):
+        if self._find_now("dmg-mode") is not None and self._find_now("cgb-mode") is not None:
+            return
+
+        settings_button = self._wait_for_id("drawer-section-settings", clickable=True)
+        settings_button.click()
+        self._wait_for_id("dmg-mode", timeout=self.wait_timeout)
+        self._wait_for_id("cgb-mode", timeout=self.wait_timeout)
 
     def setup(self):
         # requires: chormedriver (https://sites.google.com/chromium.org/driver/)
         self.driver = webdriver.Chrome()
         self.driver.get("https://emmy.n1ark.com/")
-        self.driver.find_element(value="emu-speed").click()
-        self.driver.find_element(value="drawer-section-settings").click()
+        self._wait(lambda driver: driver.execute_script("return document.readyState") == "complete")
+        self._wait_for_id("emu-speed", clickable=True).click()
+        self._ensure_settings_open()
 
     def isWindowOpen(self):
         return self.driver is not None
@@ -37,10 +64,11 @@ class Emmy(Emulator):
         systemmode = {DMG: "dmg-mode", CGB: "cgb-mode"}.get(model)
         if systemmode is None:
             return None
-        self.driver.find_element(value=systemmode).click()
+        self._ensure_settings_open()
+        self._wait_for_id(systemmode, clickable=True).click()
         rom_path = os.path.abspath(rom)
         try:
-            self.driver.find_element(value="rom-input").send_keys(rom_path)
+            self._wait_for_id("rom-input").send_keys(rom_path)
             try:
                 # if an alert appeared, it means the rom is incompatible
                 self.driver.switch_to.alert.accept()
