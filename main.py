@@ -24,10 +24,28 @@ import testroms.mealybug
 from test import *
 
 
-def _matches_any_keyword(filter_data, keywords):
+def _normalize_emulator_keyword(value):
+    return "".join(c for c in str(value).lower() if c.isalnum())
+
+
+def _matches_emulator_filter(filter_data, keywords):
     if filter_data is None:
         return True
-    return any(checkFilter(keyword, filter_data) for keyword in keywords)
+    normalized_keywords = {_normalize_emulator_keyword(keyword) for keyword in keywords}
+
+    out_filter = False
+    for f in filter_data:
+        if f.startswith("!"):
+            out_filter = True
+            if _normalize_emulator_keyword(f[1:]) in normalized_keywords:
+                return False
+    if out_filter:
+        return True
+
+    for f in filter_data:
+        if not f.startswith("!") and _normalize_emulator_keyword(f) in normalized_keywords:
+            return True
+    return False
 
 
 def _new_instance(module_name, class_name):
@@ -55,7 +73,7 @@ def load_emulators(filter_data):
         (lambda: _new_instance("emulators.gameroy", "GameRoy"), ["gameroy", "GameRoy"]),
     ]
 
-    return [factory() for factory, keywords in emulator_factories if _matches_any_keyword(filter_data, keywords)]
+    return [factory() for factory, keywords in emulator_factories if _matches_emulator_filter(filter_data, keywords)]
 
 
 tests = testroms.acid.all + testroms.blarg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.hacktix.all + testroms.cpp.all + testroms.mealybug.all
@@ -107,7 +125,6 @@ if __name__ == "__main__":
         if checkFilter(test, args.test) and checkFilter(test.model, args.model)
     ]
     emulators = load_emulators(args.emulator)
-    emulators = [emulator for emulator in emulators if checkFilter(emulator, args.emulator)]
 
     print("%d emulators" % (len(emulators)))
     print("%d tests" % (len(tests)))
