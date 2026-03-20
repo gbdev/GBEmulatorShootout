@@ -2,17 +2,22 @@ from util import *
 from emulator import Emulator
 from test import *
 import os
-import shutil
 
 
 class KiGB(Emulator):
     def __init__(self):
         super().__init__("KiGB", "http://kigb.emuunlim.com/", startup_time=1.6)
 
+    def _running_in_ci(self):
+        return os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS")
+
     def setup(self):
         download("http://kigb.emuunlim.com/kigb_win.zip", "downloads/kigb.zip")
         extract("downloads/kigb.zip", "emu/kigb")
-        setDPIScaling("emu/kigb/kigb.exe")
+        if self._running_in_ci():
+            setAppCompatLayers("emu/kigb/kigb.exe", "DisableNXShowUI", "HIGHDPIAWARE")
+        else:
+            setDPIScaling("emu/kigb/kigb.exe")
     
     def startProcess(self, rom, *, model, required_features):
         model = {DMG: 0, CGB: 1, SGB: 4}.get(model)
