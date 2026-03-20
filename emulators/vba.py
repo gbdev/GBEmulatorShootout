@@ -22,10 +22,16 @@ class VBA(Emulator):
     def __init__(self):
         super().__init__("VisualBoyAdvance", "https://sourceforge.net/projects/vba", startup_time=0.6)
 
+    def _running_in_ci(self):
+        return os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS")
+
     def setup(self):
         download("https://sourceforge.net/projects/vba/files/latest/download", "downloads/vba.zip")
         extract("downloads/vba.zip", "emu/vba")
-        setDPIScaling("emu/vba/VisualBoyAdvance.exe")
+        if self._running_in_ci():
+            setAppCompatLayers("emu/vba/VisualBoyAdvance-SDL.exe", "DisableNXShowUI", "HIGHDPIAWARE")
+        else:
+            setDPIScaling("emu/vba/VisualBoyAdvance-SDL.exe")
         shutil.copyfile(os.path.join(os.path.dirname(__file__), "VisualBoyAdvance.cfg"), "emu/vba/VisualBoyAdvance.cfg")
         download("https://gbdev.gg8.se/files/roms/bootroms/sgb_boot.bin", "emu/vba/sgb_boot.bin")
         download("https://gbdev.gg8.se/files/roms/bootroms/cgb_boot.bin", "emu/vba/cgb_boot.bin")
