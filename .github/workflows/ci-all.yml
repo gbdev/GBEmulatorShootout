@@ -34,7 +34,7 @@ jobs:
             extra_requirements: ''
           - emulator: VisualBoyAdvance
             needs_chromedriver: false
-            needs_audio: true
+            needs_audio: false
             extra_requirements: ''
           - emulator: VisualBoyAdvance-M
             needs_chromedriver: false

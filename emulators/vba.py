@@ -32,7 +32,9 @@ class VBA(Emulator):
         download("https://gbdev.gg8.se/files/roms/bootroms/dmg_boot.bin", "emu/vba/dmg_boot.bin")
 
     def startProcess(self, rom, *, model, required_features):
-        return subprocess.Popen(["emu/vba/VisualBoyAdvance-SDL.exe", os.path.abspath(rom)], cwd="emu/vba")
+        env = os.environ.copy()
+        env["SDL_AUDIODRIVER"] = "dummy"
+        return subprocess.Popen(["emu/vba/VisualBoyAdvance-SDL.exe", os.path.abspath(rom)], cwd="emu/vba", env=env)
 
     def getScreenshot(self):
         screenshot = getScreenshot(self.title_check)
