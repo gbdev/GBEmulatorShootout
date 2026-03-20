@@ -122,8 +122,21 @@ def getScreenshot(title_check):
 def fullscreenScreenshot():
     return pyautogui.screenshot()
 
+def setAppCompatLayers(executable, *layers):
+    value = "~"
+    if layers:
+        value += " " + " ".join(layers)
+    subprocess.run([
+        "REG", "ADD",
+        r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers",
+        "/V", os.path.abspath(executable),
+        "/T", "REG_SZ",
+        "/D", value,
+        "/F",
+    ])
+
 def setDPIScaling(executable):
-    subprocess.run(["REG", "ADD", r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers", "/V", os.path.abspath(executable), "/T", "REG_SZ", "/D", "~ HIGHDPIAWARE", "/F"])
+    setAppCompatLayers(executable, "HIGHDPIAWARE")
 
 def compareImage(a, b):
     a = a.convert(mode="L", dither=PIL.Image.NONE)

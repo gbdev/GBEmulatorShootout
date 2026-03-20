@@ -81,7 +81,10 @@ EMU_TYPE = %d
     def setup(self):
         download("http://kigb.emuunlim.com/kigb_win.zip", "downloads/kigb.zip")
         extract("downloads/kigb.zip", "emu/kigb")
-        setDPIScaling("emu/kigb/kigb.exe")
+        if self._running_in_ci():
+            setAppCompatLayers("emu/kigb/kigb.exe", "DisableNXShowUI", "HIGHDPIAWARE")
+        else:
+            setDPIScaling("emu/kigb/kigb.exe")
         self._write_allegro_config()
     
     def startProcess(self, rom, *, model, required_features):
