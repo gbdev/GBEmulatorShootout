@@ -100,10 +100,11 @@ jobs:
 
       - name: Run emulator tests
         id: run_emulator_tests
+        continue-on-error: true
         run: python main.py --emulator "${{ inputs.emulator }}"
 
       - name: Collect crash diagnostics
-        if: ${{ failure() }}
+        if: ${{ always() && steps.run_emulator_tests.outcome == 'failure' }}
         shell: powershell
         run: |
           $ErrorActionPreference = "Continue"
@@ -141,7 +142,7 @@ jobs:
           }
 
       - name: Upload crash diagnostics
-        if: ${{ failure() }}
+        if: ${{ always() && steps.run_emulator_tests.outcome == 'failure' }}
         uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.emulator }}-diagnostics
@@ -149,8 +150,15 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload emulator results
+        if: ${{ always() }}
         uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.emulator }}-results
           path: '*.json'
           if-no-files-found: ignore
+
+      - name: Fail job if emulator tests failed
+        if: ${{ steps.run_emulator_tests.outcome == 'failure' }}
+        shell: powershell
+        run: |
+          throw "Emulator tests failed. See uploaded diagnostics artifact."
