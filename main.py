@@ -12,7 +12,7 @@ import json
 import traceback
 from importlib import import_module
 
-import testroms.blarg
+import testroms.blargg
 import testroms.mooneye
 import testroms.acid
 import testroms.samesuite
@@ -58,7 +58,7 @@ def load_emulators(filter_data):
     return [factory() for factory, keywords in emulator_factories if _matches_any_keyword(filter_data, keywords)]
 
 
-tests = testroms.acid.all + testroms.blarg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.hacktix.all + testroms.cpp.all + testroms.mealybug.all
+tests = testroms.acid.all + testroms.blargg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.hacktix.all + testroms.cpp.all + testroms.mealybug.all
 
 def checkFilter(input, filter_data):
     if filter_data is None:
