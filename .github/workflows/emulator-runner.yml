@@ -28,18 +28,6 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Enable Windows crash dumps
-        shell: powershell
-        run: |
-          $ErrorActionPreference = "Stop"
-          $dumpDir = "C:\crash-dumps"
-          New-Item -Path $dumpDir -ItemType Directory -Force | Out-Null
-
-          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /f
-          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpFolder /t REG_EXPAND_SZ /d $dumpDir /f
-          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpType /t REG_DWORD /d 2 /f
-          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpCount /t REG_DWORD /d 10 /f
-
       - name: Install base Python requirements
         run: |
           python -m pip install --upgrade pip
@@ -99,71 +87,11 @@ jobs:
           & $devcon install $screamInf '*Scream'
 
       - name: Run emulator tests
-        id: run_emulator_tests
-        shell: powershell
-        run: |
-          $ErrorActionPreference = "Continue"
-          python main.py --emulator "${{ inputs.emulator }}"
-          $exitCode = $LASTEXITCODE
-          "exit_code=$exitCode" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-          exit 0
-
-      - name: Collect crash diagnostics
-        if: ${{ always() }}
-        shell: powershell
-        run: |
-          $ErrorActionPreference = "Continue"
-          $diagnosticsDir = Join-Path $PWD "diagnostics"
-          $werDir = Join-Path $diagnosticsDir "wer"
-          $dumpDir = Join-Path $diagnosticsDir "dumps"
-          New-Item -Path $diagnosticsDir -ItemType Directory -Force | Out-Null
-          New-Item -Path $werDir -ItemType Directory -Force | Out-Null
-          New-Item -Path $dumpDir -ItemType Directory -Force | Out-Null
-
-          $startTime = (Get-Date).AddHours(-2)
-
-          Get-WinEvent -FilterHashtable @{ LogName = 'Application'; StartTime = $startTime } -ErrorAction SilentlyContinue |
-            Where-Object {
-              $_.LevelDisplayName -in @('Error', 'Critical', 'Warning') -and (
-                $_.ProviderName -match 'Application Error|Windows Error Reporting' -or
-                $_.Message -match '(?i)\\.exe|faulting application|exception code'
-              )
-            } |
-            Sort-Object TimeCreated |
-            Format-List TimeCreated, ProviderName, Id, LevelDisplayName, Message |
-            Out-File (Join-Path $diagnosticsDir 'application-event-log.txt') -Width 4096
-
-          if (Test-Path 'C:\crash-dumps') {
-            Copy-Item 'C:\crash-dumps\*' $dumpDir -Recurse -Force -ErrorAction SilentlyContinue
-          }
-
-          $werArchive = 'C:\ProgramData\Microsoft\Windows\WER\ReportArchive'
-          if (Test-Path $werArchive) {
-            Get-ChildItem $werArchive -Directory -ErrorAction SilentlyContinue |
-              Where-Object { $_.LastWriteTime -ge $startTime } |
-              ForEach-Object {
-                Copy-Item $_.FullName $werDir -Recurse -Force -ErrorAction SilentlyContinue
-              }
-          }
-
-      - name: Upload crash diagnostics
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ inputs.emulator }}-diagnostics
-          path: diagnostics/**
-          if-no-files-found: ignore
+        run: python main.py --emulator "${{ inputs.emulator }}"
 
       - name: Upload emulator results
-        if: ${{ always() }}
         uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.emulator }}-results
           path: '*.json'
           if-no-files-found: ignore
-
-      - name: Fail job if emulator tests failed
-        if: ${{ steps.run_emulator_tests.outputs.exit_code != '0' }}
-        shell: powershell
-        run: |
-          throw "Emulator tests failed with exit code ${{ steps.run_emulator_tests.outputs.exit_code }}. See uploaded diagnostics artifact."
