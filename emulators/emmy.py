@@ -10,7 +10,33 @@ import PIL.Image
 class Emmy(Emulator):
     def __init__(self):
         super().__init__("Emmy", "https://emmy.n1ark.com/", startup_time=0.5)
+        self.driver = None
         self.wait_timeout = 10.0
+
+    def _close_driver(self):
+        if self.driver is None:
+            return
+        try:
+            self.driver.quit()
+        finally:
+            self.driver = None
+
+    def _prepare_page(self):
+        self.driver.get(self.url)
+        self._wait(lambda driver: driver.execute_script("return document.readyState") == "complete")
+        self._wait_for_id("emu-speed", clickable=True).click()
+        self._ensure_settings_open()
+
+    def _reset_session(self, *, restart_browser=False):
+        if restart_browser or self.driver is None:
+            self._close_driver()
+            self.driver = webdriver.Chrome()
+        try:
+            self._prepare_page()
+        except Exception:
+            if restart_browser:
+                raise
+            self._reset_session(restart_browser=True)
 
     def _wait(self, condition, *, timeout=None):
         return WebDriverWait(self.driver, timeout or self.wait_timeout).until(condition)
@@ -36,11 +62,7 @@ class Emmy(Emulator):
 
     def setup(self):
         # requires: chormedriver (https://sites.google.com/chromium.org/driver/)
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://emmy.n1ark.com/")
-        self._wait(lambda driver: driver.execute_script("return document.readyState") == "complete")
-        self._wait_for_id("emu-speed", clickable=True).click()
-        self._ensure_settings_open()
+        self._reset_session(restart_browser=True)
 
     def isWindowOpen(self):
         return self.driver is not None
@@ -58,12 +80,13 @@ class Emmy(Emulator):
         return 0
 
     def undoSetup(self):
-        self.driver.quit()
+        self._close_driver()
 
     def startProcess(self, rom, *, model, required_features):
         systemmode = {DMG: "dmg-mode", CGB: "cgb-mode"}.get(model)
         if systemmode is None:
             return None
+        self._reset_session()
         self._ensure_settings_open()
         self._wait_for_id(systemmode, clickable=True).click()
         rom_path = os.path.abspath(rom)
