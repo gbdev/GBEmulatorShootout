@@ -11,7 +11,7 @@ jobs:
     uses: ./.github/workflows/emulator-runner.yml
     with:
       emulator: VisualBoyAdvance
-      needs_audio: true
+      needs_audio: false
 
   deploy-pages:
     needs: run

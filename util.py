@@ -58,7 +58,7 @@ def download(url, filename, fake_headers=False, max_retries=5):
     print("Max retries exceeded. Download failed.")
     raise last_exception
 
-def downloadGithubRelease(repo, filename, *, filter=lambda n: "win" in n, allow_prerelease=False):
+def downloadGithubRelease(repo, filename, *, filter=lambda n: "win" in n, allow_prerelease=False, require_asset=False):
     if not os.path.exists(filename):
         if allow_prerelease:
             r = requests.get("https://api.github.com/repos/%s/releases" % (repo))
@@ -67,10 +67,14 @@ def downloadGithubRelease(repo, filename, *, filter=lambda n: "win" in n, allow_
             r = requests.get("https://api.github.com/repos/%s/releases/latest" % (repo))
             data = r.json()
         url = data["zipball_url"]
+        matched_asset = None
         for asset in data["assets"]:
             if filter(asset["name"]):
+                matched_asset = asset
                 url = asset["browser_download_url"]
                 break
+        if matched_asset is None and require_asset:
+            raise RuntimeError("No release asset matched for %s" % (repo))
         download(url, filename)
 
 def _getz7():
@@ -127,11 +131,15 @@ def setAppCompatLayers(executable, *layers):
     if layers:
         value += " " + " ".join(layers)
     subprocess.run([
-        "REG", "ADD",
+        "REG",
+        "ADD",
         r"HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers",
-        "/V", os.path.abspath(executable),
-        "/T", "REG_SZ",
-        "/D", value,
+        "/V",
+        os.path.abspath(executable),
+        "/T",
+        "REG_SZ",
+        "/D",
+        value,
         "/F",
     ])
 

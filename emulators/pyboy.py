@@ -8,7 +8,7 @@ import sys
 
 class PyBoy(Emulator):
     def __init__(self):
-        super().__init__("PyBoy", "https://github.com/Baekalfen/PyBoy", startup_time=5.0)
+        super().__init__("PyBoy", "https://github.com/Baekalfen/PyBoy", startup_time=5.0, features=(PCM,))
         self.title_check = lambda title: "PyBoy" in title
 
     def setup(self):
