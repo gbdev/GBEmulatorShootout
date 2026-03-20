@@ -26,7 +26,7 @@ class VBA(Emulator):
         download("https://sourceforge.net/projects/vba/files/latest/download", "downloads/vba.zip")
         extract("downloads/vba.zip", "emu/vba")
         setDPIScaling("emu/vba/VisualBoyAdvance.exe")
-        shutil.copyfile(os.path.join(os.path.dirname(__file__), "vba.ini"), "emu/vba/vba.ini")
+        shutil.copyfile(os.path.join(os.path.dirname(__file__), "VisualBoyAdvance.cfg"), "emu/vba/VisualBoyAdvance.cfg")
         download("https://gbdev.gg8.se/files/roms/bootroms/sgb_boot.bin", "emu/vba/sgb_boot.bin")
         download("https://gbdev.gg8.se/files/roms/bootroms/cgb_boot.bin", "emu/vba/cgb_boot.bin")
         download("https://gbdev.gg8.se/files/roms/bootroms/dmg_boot.bin", "emu/vba/dmg_boot.bin")
