@@ -1,6 +1,7 @@
 name: Deploy Pages
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       artifact_pattern:
@@ -15,11 +16,17 @@ jobs:
   deploy:
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
 
+      - name: Install build dependencies
+        run: python -m pip install -r requirements-core.txt
+
       - name: Download emulator results
+        if: ${{ inputs.artifact_pattern != '' }}
         uses: actions/download-artifact@v5
         with:
           pattern: ${{ inputs.artifact_pattern }}
@@ -37,10 +44,12 @@ jobs:
           } else {
             Write-Host "No emulator JSON artifacts found to publish."
           }
+          python main.py --dump-emulators-json --dump-tests-json
+          Copy-Item emulators.json, tests.json -Destination pages -Force
+          python build.py --results-dir pages --emulators pages/emulators.json --tests pages/tests.json --output pages/index.html
+          Remove-Item pages\build.py -ErrorAction SilentlyContinue
           Set-Location pages
-          python build.py
-          git add *.json
-          git add index.html
+          git add -A
           if (git diff --cached --quiet) {
             Write-Host "No gh-pages changes to commit."
             exit 0

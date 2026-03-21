@@ -53,28 +53,125 @@ def _new_instance(module_name, class_name):
     return getattr(module, class_name)()
 
 
-def load_emulators(filter_data):
-    emulator_factories = [
-        (lambda: _new_instance("emulators.bdm", "BDM"), ["Beaten Dying Moon", "bdm", "beaten"]),
-        (lambda: _new_instance("emulators.mgba", "MGBA"), ["mGBA", "mgba"]),
-        (lambda: _new_instance("emulators.kigb", "KiGB"), ["KiGB", "kigb"]),
-        (lambda: _new_instance("emulators.sameboy", "SameBoy"), ["SameBoy", "sameboy"]),
-        (lambda: _new_instance("emulators.bgb", "BGB"), ["bgb"]),
-        (lambda: _new_instance("emulators.vba", "VBA"), ["VisualBoyAdvance", "vba"]),
-        (lambda: _new_instance("emulators.vba", "VBAM"), ["VisualBoyAdvance-M", "vba-m", "vbam"]),
-        (lambda: _new_instance("emulators.nocash", "NoCash"), ["No$gmb", "nocash", "no$gmb"]),
-        (lambda: _new_instance("emulators.gambatte", "GambatteSpeedrun"), ["GambatteSpeedrun", "gambatte"]),
-        (lambda: _new_instance("emulators.emulicious", "Emulicious"), ["Emulicious", "emulicious"]),
-        (lambda: _new_instance("emulators.goomba", "Goomba"), ["Goomba", "goomba"]),
-        (lambda: _new_instance("emulators.binjgb", "Binjgb"), ["binjgb"]),
-        (lambda: _new_instance("emulators.pyboy", "PyBoy"), ["PyBoy", "pyboy"]),
-        (lambda: _new_instance("emulators.ares", "Ares"), ["ares"]),
-        (lambda: _new_instance("emulators.emmy", "Emmy"), ["Emmy", "emmy"]),
-        (lambda: _new_instance("emulators.gameroy", "GameRoy"), ["gameroy", "GameRoy"]),
-        (lambda: _new_instance("emulators.docboy", "DocBoy"), ["docboy", "DocBoy"]),
+EMULATOR_SPECS = [
+    {
+        'factory': lambda: _new_instance("emulators.bdm", "BDM"),
+        'keywords': ["Beaten Dying Moon", "bdm", "beaten"],
+        'name': "Beaten Dying Moon",
+        'url': "https://mattcurrie.com/bdm-demo/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.mgba", "MGBA"),
+        'keywords': ["mGBA", "mgba"],
+        'name': "mGBA",
+        'url': "https://mgba.io/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.kigb", "KiGB"),
+        'keywords': ["KiGB", "kigb"],
+        'name': "KiGB",
+        'url': "http://kigb.emuunlim.com/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.sameboy", "SameBoy"),
+        'keywords': ["SameBoy", "sameboy"],
+        'name': "SameBoy",
+        'url': "https://sameboy.github.io/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.bgb", "BGB"),
+        'keywords': ["bgb"],
+        'name': "bgb",
+        'url': "https://bgb.bircd.org/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.vba", "VBA"),
+        'keywords': ["VisualBoyAdvance", "vba"],
+        'name': "VisualBoyAdvance",
+        'url': "https://sourceforge.net/projects/vba",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.vba", "VBAM"),
+        'keywords': ["VisualBoyAdvance-M", "vba-m", "vbam"],
+        'name': "VisualBoyAdvance-M",
+        'url': "https://vba-m.com/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.nocash", "NoCash"),
+        'keywords': ["No$gmb", "nocash", "no$gmb"],
+        'name': "No$gmb",
+        'url': "https://problemkaputt.de/gmb.htm",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.gambatte", "GambatteSpeedrun"),
+        'keywords': ["GambatteSpeedrun", "gambatte"],
+        'name': "GambatteSpeedrun",
+        'url': "https://github.com/pokemon-speedrunning/gambatte-speedrun",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.emulicious", "Emulicious"),
+        'keywords': ["Emulicious", "emulicious"],
+        'name': "Emulicious",
+        'url': "https://emulicious.net/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.goomba", "Goomba"),
+        'keywords': ["Goomba", "goomba"],
+        'name': "Goomba",
+        'url': "https://www.dwedit.org/gba/goombacolor.php",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.binjgb", "Binjgb"),
+        'keywords': ["binjgb"],
+        'name': "binjgb",
+        'url': "https://github.com/binji/binjgb/releases",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.pyboy", "PyBoy"),
+        'keywords': ["PyBoy", "pyboy"],
+        'name': "PyBoy",
+        'url': "https://github.com/Baekalfen/PyBoy",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.ares", "Ares"),
+        'keywords': ["ares"],
+        'name': "ares",
+        'url': "https://ares-emu.net/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.emmy", "Emmy"),
+        'keywords': ["Emmy", "emmy"],
+        'name': "Emmy",
+        'url': "https://emmy.n1ark.com/",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.gameroy", "GameRoy"),
+        'keywords': ["gameroy", "GameRoy"],
+        'name': "gameroy",
+        'url': "https://github.com/Rodrigodd/gameroy",
+    },
+    {
+        'factory': lambda: _new_instance("emulators.docboy", "DocBoy"),
+        'keywords': ["DocBoy", "docboy"],
+        'name': "docboy",
+        'url': "https://github.com/Docheinstein/docboy",
+    },
+]
+
+
+def get_emulator_specs(filter_data):
+    return [
+        spec for spec in EMULATOR_SPECS
+        if _matches_emulator_filter(filter_data, spec['keywords'])
     ]
 
-    return [factory() for factory, keywords in emulator_factories if _matches_emulator_filter(filter_data, keywords)]
+
+def get_emulator_json_filename(name):
+    return "%s.json" % (name.replace(" ", "_").lower())
+
+
+def load_emulators(filter_data):
+    return [spec['factory']() for spec in get_emulator_specs(filter_data)]
 
 
 tests = testroms.acid.all + testroms.blargg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.hacktix.all + testroms.cpp.all + testroms.mealybug.all
@@ -125,6 +222,28 @@ if __name__ == "__main__":
         for test in tests
         if checkFilter(test, args.test) and checkFilter(test.model, args.model)
     ]
+    emulator_specs = get_emulator_specs(args.emulator)
+
+    if args.dump_emulators_json:
+        json.dump({
+            spec['name']: {
+                'file': get_emulator_json_filename(spec['name']),
+                'url': spec['url'],
+            } for spec in emulator_specs
+        }, open("emulators.json", "wt"), indent="  ")
+    if args.dump_tests_json:
+        json.dump([
+            {
+                'name': str(test),
+                'description': test.description,
+                'url': test.url,
+            } for test in tests
+        ], open("tests.json", "wt"), indent="  ")
+    if args.dump_tests_json or args.dump_emulators_json:
+        print("%d emulators" % (len(emulator_specs)))
+        print("%d tests" % (len(tests)))
+        sys.exit()
+
     emulators = load_emulators(args.emulator)
 
     print("%d emulators" % (len(emulators)))
@@ -138,23 +257,6 @@ if __name__ == "__main__":
                     continue
                 print("%s: %s: %g seconds" % (emulator, test, emulator.getRunTimeFor(test)))
             emulator.undoSetup()
-        sys.exit()
-    if args.dump_emulators_json:
-        json.dump({
-            str(emulator): {
-                "file": emulator.getJsonFilename(),
-                "url": emulator.url,
-            } for emulator in emulators
-        }, open("emulators.json", "wt"), indent="  ")
-    if args.dump_tests_json:
-        json.dump([
-            {
-                'name': str(test),
-                'description': test.description,
-                'url': test.url,
-            } for test in tests
-        ], open("tests.json", "wt"), indent="  ")
-    if args.dump_tests_json or args.dump_emulators_json:
         sys.exit()
 
     if args.get_startuptime:
