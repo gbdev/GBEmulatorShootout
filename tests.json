@@ -25,257 +25,257 @@
     "url": "https://github.com/mattcurrie/cgb-acid-hell"
   },
   {
-    "name": "blarg/cpu_instrs/01-special.gb",
+    "name": "blargg/cpu_instrs/01-special.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/02-interrupts.gb",
+    "name": "blargg/cpu_instrs/02-interrupts.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/03-op_sp,hl.gb",
+    "name": "blargg/cpu_instrs/03-op_sp,hl.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/04-op_r,imm.gb",
+    "name": "blargg/cpu_instrs/04-op_r,imm.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/05-op_rp.gb",
+    "name": "blargg/cpu_instrs/05-op_rp.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/06-ld_r,r.gb",
+    "name": "blargg/cpu_instrs/06-ld_r,r.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/07-jr,jp,call,ret,rst.gb",
+    "name": "blargg/cpu_instrs/07-jr,jp,call,ret,rst.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/08-misc_instrs.gb",
+    "name": "blargg/cpu_instrs/08-misc_instrs.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/09-op_r,r.gb",
+    "name": "blargg/cpu_instrs/09-op_r,r.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/10-bit_ops.gb",
+    "name": "blargg/cpu_instrs/10-bit_ops.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cpu_instrs/11-op_a,(hl).gb",
+    "name": "blargg/cpu_instrs/11-op_a,(hl).gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/halt_bug.gb",
+    "name": "blargg/halt_bug.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/instr_timing.gb",
+    "name": "blargg/instr_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/interrupt_time.gb",
+    "name": "blargg/interrupt_time.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/mem_timing/01-read_timing.gb",
+    "name": "blargg/mem_timing/01-read_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/mem_timing/02-write_timing.gb",
+    "name": "blargg/mem_timing/02-write_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/mem_timing/03-modify_timing.gb",
+    "name": "blargg/mem_timing/03-modify_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/mem_timing-2/01-read_timing.gb",
+    "name": "blargg/mem_timing-2/01-read_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/mem_timing-2/02-write_timing.gb",
+    "name": "blargg/mem_timing-2/02-write_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/mem_timing-2/03-modify_timing.gb",
+    "name": "blargg/mem_timing-2/03-modify_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/oam_bug/1-lcd_sync.gb",
+    "name": "blargg/oam_bug/1-lcd_sync.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/oam_bug/2-causes.gb",
+    "name": "blargg/oam_bug/2-causes.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/oam_bug/3-non_causes.gb",
+    "name": "blargg/oam_bug/3-non_causes.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/oam_bug/4-scanline_timing.gb",
+    "name": "blargg/oam_bug/4-scanline_timing.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/oam_bug/5-timing_bug.gb",
+    "name": "blargg/oam_bug/5-timing_bug.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/oam_bug/6-timing_no_bug.gb",
+    "name": "blargg/oam_bug/6-timing_no_bug.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/oam_bug/8-instr_effect.gb",
+    "name": "blargg/oam_bug/8-instr_effect.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/01-registers.gb",
+    "name": "blargg/dmg_sound/01-registers.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/02-len_ctr.gb",
+    "name": "blargg/dmg_sound/02-len_ctr.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/03-trigger.gb",
+    "name": "blargg/dmg_sound/03-trigger.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/04-sweep.gb",
+    "name": "blargg/dmg_sound/04-sweep.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/05-sweep_details.gb",
+    "name": "blargg/dmg_sound/05-sweep_details.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/06-overflow_on_trigger.gb",
+    "name": "blargg/dmg_sound/06-overflow_on_trigger.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/07-len_sweep_period_sync.gb",
+    "name": "blargg/dmg_sound/07-len_sweep_period_sync.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/08-len_ctr_during_power.gb",
+    "name": "blargg/dmg_sound/08-len_ctr_during_power.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/09-wave_read_while_on.gb",
+    "name": "blargg/dmg_sound/09-wave_read_while_on.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/10-wave_trigger_while_on.gb",
+    "name": "blargg/dmg_sound/10-wave_trigger_while_on.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/11-regs_after_power.gb",
+    "name": "blargg/dmg_sound/11-regs_after_power.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/dmg_sound/12-wave_write_while_on.gb",
+    "name": "blargg/dmg_sound/12-wave_write_while_on.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/01-registers.gb",
+    "name": "blargg/cgb_sound/01-registers.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/02-len_ctr.gb",
+    "name": "blargg/cgb_sound/02-len_ctr.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/03-trigger.gb",
+    "name": "blargg/cgb_sound/03-trigger.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/04-sweep.gb",
+    "name": "blargg/cgb_sound/04-sweep.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/05-sweep_details.gb",
+    "name": "blargg/cgb_sound/05-sweep_details.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/06-overflow_on_trigger.gb",
+    "name": "blargg/cgb_sound/06-overflow_on_trigger.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/07-len_sweep_period_sync.gb",
+    "name": "blargg/cgb_sound/07-len_sweep_period_sync.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/08-len_ctr_during_power.gb",
+    "name": "blargg/cgb_sound/08-len_ctr_during_power.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/09-wave_read_while_on.gb",
+    "name": "blargg/cgb_sound/09-wave_read_while_on.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/10-wave_trigger_while_on.gb",
+    "name": "blargg/cgb_sound/10-wave_trigger_while_on.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/11-regs_after_power.gb",
+    "name": "blargg/cgb_sound/11-regs_after_power.gb",
     "description": null,
     "url": null
   },
   {
-    "name": "blarg/cgb_sound/12-wave.gb",
+    "name": "blargg/cgb_sound/12-wave.gb",
     "description": null,
     "url": null
   },
