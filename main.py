@@ -94,7 +94,7 @@ EMULATOR_SPECS = [
         'factory': lambda: _new_instance("emulators.vba", "VBAM"),
         'keywords': ["VisualBoyAdvance-M", "vba-m", "vbam"],
         'name': "VisualBoyAdvance-M",
-        'url': "https://vba-m.com/",
+        'url': "https://github.com/visualboyadvance-m/visualboyadvance-m",
     },
     {
         'factory': lambda: _new_instance("emulators.nocash", "NoCash"),
@@ -124,7 +124,7 @@ EMULATOR_SPECS = [
         'factory': lambda: _new_instance("emulators.binjgb", "Binjgb"),
         'keywords': ["binjgb"],
         'name': "binjgb",
-        'url': "https://github.com/binji/binjgb/releases",
+        'url': "https://github.com/binji/binjgb",
     },
     {
         'factory': lambda: _new_instance("emulators.pyboy", "PyBoy"),
