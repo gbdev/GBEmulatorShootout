@@ -76,6 +76,10 @@ jobs:
             needs_chromedriver: false
             needs_audio: true
             extra_requirements: ''
+          - emulator: DocBoy
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
     uses: ./.github/workflows/emulator-runner.yml
     with:
       emulator: ${{ matrix.emulator }}
