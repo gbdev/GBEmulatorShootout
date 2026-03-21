@@ -1,0 +1,55 @@
+name: Deploy Pages
+
+on:
+  workflow_call:
+    inputs:
+      artifact_pattern:
+        required: false
+        type: string
+        default: '*-results'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      - name: Download emulator results
+        uses: actions/download-artifact@v5
+        with:
+          pattern: ${{ inputs.artifact_pattern }}
+          path: artifacts
+          merge-multiple: true
+
+      - name: Build and commit gh-pages update
+        shell: powershell
+        run: |
+          git config --global user.name "github actions"
+          git config --global user.email "github@actions"
+          git clone --single-branch --branch gh-pages "https://github.com/${{ github.repository }}.git" pages
+          if (Test-Path "artifacts\\*.json") {
+            Copy-Item -Path artifacts\*.json -Destination pages -Force
+          } else {
+            Write-Host "No emulator JSON artifacts found to publish."
+          }
+          Set-Location pages
+          python build.py
+          git add *.json
+          git add index.html
+          if (git diff --cached --quiet) {
+            Write-Host "No gh-pages changes to commit."
+            exit 0
+          }
+          git commit -m "Update"
+
+      - name: Push gh-pages changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          directory: pages

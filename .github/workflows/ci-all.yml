@@ -1,0 +1,89 @@
+name: CI - all emulators
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-all:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - emulator: Beaten Dying Moon
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: mGBA
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: KiGB
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: SameBoy
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: bgb
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: VisualBoyAdvance
+            needs_chromedriver: false
+            needs_audio: false
+            extra_requirements: ''
+          - emulator: VisualBoyAdvance-M
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: No$gmb
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: GambatteSpeedrun
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: Emulicious
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: Goomba
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: binjgb
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: PyBoy
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: ares
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+          - emulator: Emmy
+            needs_chromedriver: true
+            needs_audio: false
+            extra_requirements: requirements-emmy.txt
+          - emulator: gameroy
+            needs_chromedriver: false
+            needs_audio: true
+            extra_requirements: ''
+    uses: ./.github/workflows/emulator-runner.yml
+    with:
+      emulator: ${{ matrix.emulator }}
+      needs_chromedriver: ${{ matrix.needs_chromedriver }}
+      needs_audio: ${{ matrix.needs_audio }}
+      extra_requirements: ${{ matrix.extra_requirements }}
+
+  deploy-pages:
+    if: ${{ always() }}
+    needs: run-all
+    uses: ./.github/workflows/deploy-pages.yml

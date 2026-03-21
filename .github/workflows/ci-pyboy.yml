@@ -1,0 +1,18 @@
+name: CI - PyBoy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    uses: ./.github/workflows/emulator-runner.yml
+    with:
+      emulator: PyBoy
+      needs_audio: true
+
+  deploy-pages:
+    needs: run
+    uses: ./.github/workflows/deploy-pages.yml

@@ -10,8 +10,9 @@ import sys
 import argparse
 import json
 import traceback
+from importlib import import_module
 
-import testroms.blarg
+import testroms.blargg
 import testroms.mooneye
 import testroms.acid
 import testroms.samesuite
@@ -20,49 +21,63 @@ import testroms.daid
 import testroms.hacktix
 import testroms.cpp
 import testroms.mealybug
-from emulators.kigb import KiGB
-from emulators.bgb import BGB
-from emulators.vba import VBA, VBAM
-from emulators.mgba import MGBA
-from emulators.sameboy import SameBoy
-from emulators.nocash import NoCash
-from emulators.gambatte import GambatteSpeedrun
-from emulators.emulicious import Emulicious
-from emulators.bdm import BDM
-from emulators.higan import Higan
-from emulators.goomba import Goomba
-from emulators.binjgb import Binjgb
-from emulators.pyboy import PyBoy
-from emulators.ares import Ares
-from emulators.emmy import Emmy
-from emulators.docboy import DocBoy
-
-from emulators.gameroy import GameRoy
-from util import *
 from test import *
 
 
-emulators = [
-    BDM(),
-    MGBA(), # Black screen on github actions
-    KiGB(), # Crashes on github actions
-    SameBoy(),
-    BGB(),
-    VBA(),
-    VBAM(),
-    NoCash(),
-    GambatteSpeedrun(),
-    Emulicious(),
-    # Higan(), # Crashes all over the place.
-    Goomba(),
-    Binjgb(),
-    PyBoy(),
-    Ares(),
-    Emmy(),
-    GameRoy(),
-    DocBoy(),
-]
-tests = testroms.acid.all + testroms.blarg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.hacktix.all + testroms.cpp.all + testroms.mealybug.all
+def _normalize_emulator_keyword(value):
+    return "".join(c for c in str(value).lower() if c.isalnum())
+
+
+def _matches_emulator_filter(filter_data, keywords):
+    if filter_data is None:
+        return True
+    normalized_keywords = {_normalize_emulator_keyword(keyword) for keyword in keywords}
+
+    out_filter = False
+    for f in filter_data:
+        if f.startswith("!"):
+            out_filter = True
+            if _normalize_emulator_keyword(f[1:]) in normalized_keywords:
+                return False
+    if out_filter:
+        return True
+
+    for f in filter_data:
+        if not f.startswith("!") and _normalize_emulator_keyword(f) in normalized_keywords:
+            return True
+    return False
+
+
+def _new_instance(module_name, class_name):
+    module = import_module(module_name)
+    return getattr(module, class_name)()
+
+
+def load_emulators(filter_data):
+    emulator_factories = [
+        (lambda: _new_instance("emulators.bdm", "BDM"), ["Beaten Dying Moon", "bdm", "beaten"]),
+        (lambda: _new_instance("emulators.mgba", "MGBA"), ["mGBA", "mgba"]),
+        (lambda: _new_instance("emulators.kigb", "KiGB"), ["KiGB", "kigb"]),
+        (lambda: _new_instance("emulators.sameboy", "SameBoy"), ["SameBoy", "sameboy"]),
+        (lambda: _new_instance("emulators.bgb", "BGB"), ["bgb"]),
+        (lambda: _new_instance("emulators.vba", "VBA"), ["VisualBoyAdvance", "vba"]),
+        (lambda: _new_instance("emulators.vba", "VBAM"), ["VisualBoyAdvance-M", "vba-m", "vbam"]),
+        (lambda: _new_instance("emulators.nocash", "NoCash"), ["No$gmb", "nocash", "no$gmb"]),
+        (lambda: _new_instance("emulators.gambatte", "GambatteSpeedrun"), ["GambatteSpeedrun", "gambatte"]),
+        (lambda: _new_instance("emulators.emulicious", "Emulicious"), ["Emulicious", "emulicious"]),
+        (lambda: _new_instance("emulators.goomba", "Goomba"), ["Goomba", "goomba"]),
+        (lambda: _new_instance("emulators.binjgb", "Binjgb"), ["binjgb"]),
+        (lambda: _new_instance("emulators.pyboy", "PyBoy"), ["PyBoy", "pyboy"]),
+        (lambda: _new_instance("emulators.ares", "Ares"), ["ares"]),
+        (lambda: _new_instance("emulators.emmy", "Emmy"), ["Emmy", "emmy"]),
+        (lambda: _new_instance("emulators.gameroy", "GameRoy"), ["gameroy", "GameRoy"]),
+        (lambda: _new_instance("emulators.docboy", "DocBoy"), ["docboy", "DocBoy"]),
+    ]
+
+    return [factory() for factory, keywords in emulator_factories if _matches_emulator_filter(filter_data, keywords)]
+
+
+tests = testroms.acid.all + testroms.blargg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.hacktix.all + testroms.cpp.all + testroms.mealybug.all
 
 def checkFilter(input, filter_data):
     if filter_data is None:
@@ -110,7 +125,7 @@ if __name__ == "__main__":
         for test in tests
         if checkFilter(test, args.test) and checkFilter(test.model, args.model)
     ]
-    emulators = [emulator for emulator in emulators if checkFilter(emulator, args.emulator)]
+    emulators = load_emulators(args.emulator)
 
     print("%d emulators" % (len(emulators)))
     print("%d tests" % (len(tests)))
@@ -143,6 +158,8 @@ if __name__ == "__main__":
         sys.exit()
 
     if args.get_startuptime:
+        from util import imageToBase64
+
         f = open("startuptime.html", "wt")
         f.write("<html><body>\n")
         for emulator in emulators:
@@ -197,6 +214,8 @@ if __name__ == "__main__":
                     traceback.print_exc()
         emulator.undoSetup()
     emulators.sort(key=lambda emulator: len([result[0] for result in results[emulator].values() if result.result != "FAIL"]), reverse=True)
+
+    from util import imageToBase64
 
     for emulator in emulators:
         def toBase64(data):

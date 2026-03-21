@@ -15,7 +15,7 @@ Video
   Quality: SD
   Supersampling: false
   EnableVulkan: false
-  Driver: GDI
+  Driver: Direct3D 9.0
   Monitor: Primary
   Format: ARGB24
   Exclusive: false

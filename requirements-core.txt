@@ -1,0 +1,5 @@
+pyautogui
+pillow
+requests
+pywin32
+tqdm

@@ -1,0 +1,20 @@
+name: CI - Emmy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    uses: ./.github/workflows/emulator-runner.yml
+    with:
+      emulator: Emmy
+      needs_chromedriver: true
+      needs_audio: false
+      extra_requirements: requirements-emmy.txt
+
+  deploy-pages:
+    needs: run
+    uses: ./.github/workflows/deploy-pages.yml

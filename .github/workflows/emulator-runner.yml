@@ -1,0 +1,97 @@
+name: Emulator Runner
+
+on:
+  workflow_call:
+    inputs:
+      emulator:
+        required: true
+        type: string
+      needs_chromedriver:
+        required: false
+        type: boolean
+        default: false
+      needs_audio:
+        required: false
+        type: boolean
+        default: true
+      extra_requirements:
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  run-emulator:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      - name: Install base Python requirements
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-core.txt
+
+      - name: Install extra Python requirements
+        if: ${{ inputs.extra_requirements != '' }}
+        run: python -m pip install -r ${{ inputs.extra_requirements }}
+
+      - name: Install ChromeDriver
+        if: ${{ inputs.needs_chromedriver }}
+        uses: nanasess/setup-chromedriver@v2.3.0
+
+      - name: Install Scream
+        if: ${{ inputs.needs_audio }}
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          Start-Service -Name Audiosrv
+
+          $zipPath = "C:\Scream3.6.zip"
+          $extractPath = "C:\Scream"
+          Invoke-WebRequest https://github.com/duncanthrax/scream/releases/download/3.6/Scream3.6.zip -OutFile $zipPath
+          if (Test-Path $extractPath) {
+            Remove-Item -Path $extractPath -Recurse -Force
+          }
+          Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+
+          $driverDir = Get-ChildItem -Path $extractPath -Recurse -Directory |
+            Where-Object { (Test-Path (Join-Path $_.FullName "Scream.sys")) -and (Test-Path (Join-Path $_.FullName "Scream.inf")) } |
+            Select-Object -First 1
+          $helpersDir = Get-ChildItem -Path $extractPath -Recurse -Directory |
+            Where-Object { Test-Path (Join-Path $_.FullName "devcon.exe") } |
+            Select-Object -First 1
+
+          if (-not $driverDir) {
+            throw "Scream driver directory was not found after extraction."
+          }
+          if (-not $helpersDir) {
+            throw "Scream helper directory containing devcon.exe was not found after extraction."
+          }
+
+          $screamSys = Join-Path $driverDir.FullName "Scream.sys"
+          $screamInf = Join-Path $driverDir.FullName "Scream.inf"
+          $devcon = Join-Path $helpersDir.FullName "devcon.exe"
+
+          $cert = (Get-AuthenticodeSignature $screamSys).SignerCertificate
+          if (-not $cert) {
+            throw "Failed to read Scream driver certificate."
+          }
+          $store = [System.Security.Cryptography.X509Certificates.X509Store]::new("TrustedPublisher", "LocalMachine")
+          $store.Open("ReadWrite")
+          $store.Add($cert)
+          $store.Close()
+
+          & $devcon install $screamInf '*Scream'
+
+      - name: Run emulator tests
+        run: python main.py --emulator "${{ inputs.emulator }}"
+
+      - name: Upload emulator results
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.emulator }}-results
+          path: '*.json'
+          if-no-files-found: ignore

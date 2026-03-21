@@ -6,7 +6,6 @@ import shutil
 import os
 import PIL.Image
 import PIL.ImageOps
-from shutil import copytree
 
 class Ares(Emulator):
     def __init__(self):
@@ -14,14 +13,27 @@ class Ares(Emulator):
         self.title_check = lambda title: "ares" in title
 
     def setup(self):
-        downloadGithubRelease("ares-emulator/ares", "downloads/ares.zip", filter=lambda n: "x64" in n and "windows" in n and n.endswith(".zip"), allow_prerelease=True)
-        extract("downloads/ares.zip", "emu/ares")
+        archive_filename = "downloads/ares-windows.zip"
+        downloadGithubRelease("ares-emulator/ares", archive_filename, filter=lambda n: "x64" in n.lower() and "windows" in n.lower() and n.endswith(".zip") and "pdb" not in n.lower(), allow_prerelease=True)
+        extracted = extract(archive_filename, "emu/ares")
 
         if not os.path.exists("emu/ares/ares.exe"):
-          copytree(os.path.join("emu/ares", os.listdir("emu/ares")[0]), "emu/ares")
+            if not extracted and os.path.exists("emu/ares"):
+                shutil.rmtree("emu/ares")
+                extract(archive_filename, "emu/ares")
+            for entry in sorted(os.listdir("emu/ares")):
+                directory = os.path.join("emu/ares", entry)
+                if not os.path.isdir(directory):
+                    continue
+                if os.path.exists(os.path.join(directory, "ares.exe")):
+                    shutil.copytree(directory, "emu/ares", dirs_exist_ok=True)
+                    break
+            if not os.path.exists("emu/ares/ares.exe"):
+                raise FileNotFoundError("Could not locate ares executable after setup")
 
         setDPIScaling("emu/ares/ares.exe")
-        shutil.copyfile(os.path.join(os.path.dirname(__file__), "ares-settings.bml"), "emu/ares/settings.bml")
+        settings_source = os.path.join(os.path.dirname(__file__), "ares-settings.bml")
+        shutil.copyfile(settings_source, "emu/ares/settings.bml")
 
     def startProcess(self, rom, *, model, required_features):
         target = "emu/ares/ares-rom.gb"
@@ -29,7 +41,7 @@ class Ares(Emulator):
         if self.cgb:
             target += "c"
         shutil.copy(rom, target)
-        return subprocess.Popen(["emu/ares/ares.exe", os.path.abspath(target)], cwd="emu/ares")
+        return subprocess.Popen([os.path.abspath("emu/ares/ares.exe"), os.path.abspath(target)], cwd="emu/ares")
 
     def getScreenshot(self):
         screenshot = getScreenshot(self.title_check)

@@ -25,10 +25,15 @@ class Emulicious(Emulator):
         #    shutil.copyfile(os.path.join(os.path.dirname(__file__), "emulicious.sgb.ini"), "emu/emulicious/Emulicious.ini")
         else:
             return None
-        return subprocess.Popen(["java", "-jar", "Emulicious.jar", "-throttle", "10000", os.path.abspath(rom)], cwd="emu/emulicious")
+        java = "java"
+        bundled_java = os.path.join("emu", "emulicious", "jre", "bin", "java.exe")
+        if os.path.exists(bundled_java):
+            java = os.path.abspath(bundled_java)
+        return subprocess.Popen([java, "-jar", "Emulicious.jar", "-throttle", "10000", os.path.abspath(rom)], cwd="emu/emulicious")
 
     def getScreenshot(self):
         screenshot = getScreenshot(self.title_check)
         if screenshot is None:
             return None
-        return screenshot.crop((0, screenshot.size[1] - 144, 160, screenshot.size[1]))
+            # Emulicious' screen is shifted slightly; capture starting 2px from the left edge.
+        return screenshot.crop((2, screenshot.size[1] - 144, 2 + 160, screenshot.size[1]))

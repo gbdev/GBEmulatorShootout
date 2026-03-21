@@ -1,6 +1,5 @@
 from util import *
 from emulator import Emulator
-import os
 import shutil
 
 
@@ -10,7 +9,7 @@ class NoCash(Emulator):
         self.speed = 1.0
 
     def setup(self):
-        download("http://problemkaputt.de/no$gmb.zip", "downloads/no$gmb.zip", fake_headers=True)
+        download("https://problemkaputt.de/no$gmb.zip", "downloads/no$gmb.zip", fake_headers=True)
         extract("downloads/no$gmb.zip", "emu/no$gmb")
         setDPIScaling("emu/no$gmb/no$gmb.exe")
         shutil.copyfile(os.path.join(os.path.dirname(__file__), "nocash.ini"), "emu/no$gmb/NO$GMB.INI")

@@ -1,84 +1,20 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Main
 
-# Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  compile:
     runs-on: windows-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
+      - name: Compile Python sources
+        run: python -m compileall -q .
 
-      # Need by Browser-based emulators.
-      - uses: nanasess/setup-chromedriver@v2
-
-      # Install virtual audio device, avoid that some emulators crash.
-      # From https://github.com/actions/runner-images/issues/2528#issuecomment-766883233
-      - name: Install Scream
-        shell: powershell
-        run: |
-          Start-Service audio*
-          Invoke-WebRequest https://github.com/duncanthrax/scream/releases/download/3.6/Scream3.6.zip -OutFile C:\Scream3.6.zip
-          Expand-7ZipArchive -Path C:\Scream3.6.zip -DestinationPath C:\Scream
-          $cert = (Get-AuthenticodeSignature C:\Scream\Install\driver\Scream.sys).SignerCertificate
-          $store = [System.Security.Cryptography.X509Certificates.X509Store]::new("TrustedPublisher", "LocalMachine")
-          $store.Open("ReadWrite")
-          $store.Add($cert)
-          $store.Close()
-          cd C:\Scream\Install\driver
-          C:\Scream\Install\helpers\devcon install Scream.inf *Scream
-
-      - name: Add python required modules
-        run: |
-          python -m pip install -r requirements.txt
-      - name: Check emulator startups
-        run: |
-          python main.py --get-startuptime
-
-      - name: Archive startup time result
-        uses: actions/upload-artifact@v2
-        with:
-          name: startuptime
-          path: startuptime.html
-
-      - name: Run tests
-        run: |
-          python main.py
-          python main.py --dump-tests-json --dump-emulators-json
-
-      - name: Deploy pages
-        run: |
-          git config --global user.name "github actions"
-          git config --global user.email "github@actions"
-          git clone --single-branch --branch gh-pages https://github.com/daid/GBEmulatorShootout.git pages
-          cp *.json pages/
-          cd pages
-          python build.py
-          git add *.json
-          git add index.html
-          git commit -a -m 'Update'
-      - name: Push page changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          directory: pages
