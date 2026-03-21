@@ -11,7 +11,7 @@ class DocBoy(Emulator):
         self.title_check = lambda title: "DocBoy" in title
 
     def setup(self):
-        downloadGithubRelease("Docheinstein/docboy", "downloads/docboy.zip")
+        downloadGithubRelease("Docheinstein/docboy", "downloads/docboy.zip", filter=lambda n: "dmg" in n and "win" in n)
         extract("downloads/docboy.zip", "emu/docboy")
         setDPIScaling("emu/docboy/docboy-sdl.exe")
         shutil.copyfile(os.path.join(os.path.dirname(__file__), "docboy.ini"),
