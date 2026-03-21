@@ -1,6 +1,7 @@
 name: Deploy Pages
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       artifact_pattern:
@@ -25,6 +26,7 @@ jobs:
         run: python -m pip install -r requirements-core.txt
 
       - name: Download emulator results
+        if: ${{ github.event_name == 'workflow_call' }}
         uses: actions/download-artifact@v5
         with:
           pattern: ${{ inputs.artifact_pattern }}
