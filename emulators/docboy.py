@@ -7,7 +7,7 @@ import shutil
 
 class DocBoy(Emulator):
     def __init__(self):
-        super().__init__("DocBoy", "https://github.com/Docheinstein/docboy", startup_time=1)
+        super().__init__("DocBoy", "https://github.com/Docheinstein/docboy", startup_time=1, features=(PCM,))
         self.title_check = lambda title: "DocBoy" in title
 
     def setup(self):
