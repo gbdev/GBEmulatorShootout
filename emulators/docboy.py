@@ -8,7 +8,6 @@ import shutil
 class DocBoy(Emulator):
     def __init__(self):
         super().__init__("DocBoy", "https://github.com/Docheinstein/docboy", startup_time=1, features=(PCM,))
-        self.title_check = lambda title: "DocBoy" in title
 
     def setup(self):
         downloadGithubRelease("Docheinstein/docboy", "downloads/docboy.zip", filter=lambda n: "dmg" in n and "win" in n)
