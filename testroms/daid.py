@@ -17,5 +17,5 @@ all = [
     Test("daid/speed_switch_timing_ly.gbc", runtime=0.5, model=CGB),
     Test("daid/speed_switch_timing_stat.gbc", runtime=0.5, model=CGB),
     Test("daid/rom_and_ram.gb", runtime=0.5,
-        description="Test how the ROM+RAM header option of the emulator acts. No official hardware is known to use this configuration. Most compattible way to emulate this is have always enabled RAM available.", url="https://github.com/daid/GBEmulatorShootout/blob/main/tests/daid/rom_and_ram.gb"),
+        description="Test how the ROM+RAM header option of the emulator acts. No official hardware is known to use this configuration. Most compatible way to emulate this is have always enabled RAM available.", url="https://github.com/daid/GBEmulatorShootout/blob/main/tests/daid/rom_and_ram.gb"),
 ]
