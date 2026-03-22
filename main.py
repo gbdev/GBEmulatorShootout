@@ -150,6 +150,12 @@ EMULATOR_SPECS = [
         'name': "gameroy",
         'url': "https://github.com/Rodrigodd/gameroy",
     },
+    {
+        'factory': lambda: _new_instance("emulators.docboy", "DocBoy"),
+        'keywords': ["DocBoy", "docboy"],
+        'name': "docboy",
+        'url': "https://github.com/Docheinstein/docboy",
+    },
 ]
 
 
