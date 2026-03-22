@@ -25,7 +25,7 @@
   },
   "VisualBoyAdvance-M": {
     "file": "visualboyadvance-m.json",
-    "url": "https://vba-m.com/"
+    "url": "https://github.com/visualboyadvance-m/visualboyadvance-m"
   },
   "No$gmb": {
     "file": "no$gmb.json",
@@ -45,7 +45,7 @@
   },
   "binjgb": {
     "file": "binjgb.json",
-    "url": "https://github.com/binji/binjgb/releases"
+    "url": "https://github.com/binji/binjgb"
   },
   "PyBoy": {
     "file": "pyboy.json",
@@ -62,5 +62,9 @@
   "gameroy": {
     "file": "gameroy.json",
     "url": "https://github.com/Rodrigodd/gameroy"
+  },
+  "docboy": {
+    "file": "docboy.json",
+    "url": "https://github.com/Docheinstein/docboy"
   }
 }
