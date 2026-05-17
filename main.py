@@ -18,7 +18,7 @@ import testroms.acid
 import testroms.samesuite
 import testroms.ax6
 import testroms.daid
-import testroms.hacktix
+import testroms.ashiepaws
 import testroms.cpp
 import testroms.mealybug
 from test import *
@@ -174,7 +174,7 @@ def load_emulators(filter_data):
     return [spec['factory']() for spec in get_emulator_specs(filter_data)]
 
 
-tests = testroms.acid.all + testroms.blargg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.hacktix.all + testroms.cpp.all + testroms.mealybug.all
+tests = testroms.acid.all + testroms.blargg.all + testroms.daid.all + testroms.ax6.all + testroms.mooneye.all + testroms.samesuite.all + testroms.ashiepaws.all + testroms.cpp.all + testroms.mealybug.all
 
 def checkFilter(input, filter_data):
     if filter_data is None:
