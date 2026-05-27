@@ -156,6 +156,12 @@ EMULATOR_SPECS = [
         'name': "docboy",
         'url': "https://github.com/Docheinstein/docboy",
     },
+    {
+        'factory': lambda: _new_instance("emulators.gse", "GSE"),
+        'keywords': ["Game Boy Speedrun Emulator", "GSE", "gse"],
+        'name': "GSE",
+        'url': "https://github.com/CasualPokePlayer/GSE",
+    },
 ]
 
 
