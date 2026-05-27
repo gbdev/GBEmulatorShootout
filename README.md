@@ -29,6 +29,7 @@ If you'd like to contribute to the project, please read [CONTRIBUTING.md](CONTRI
 - [Emulicious](https://emulicious.net/)
 - [Gambatte-Speedrun](https://github.com/pokemon-speedrunning/gambatte-speedrun)
 - [GameRoy](https://github.com/Rodrigodd/gameroy)
+- [gb-cycle](https://github.com/pakitovic/gb-cycle)
 - [Goomba Color](https://www.dwedit.org/gba/goombacolor.php)
 - [KiGB](http://kigb.emuunlim.com/)
 - [mGBA](https://mgba.io/)
