@@ -36,6 +36,8 @@ class Ares(Emulator):
         shutil.copyfile(settings_source, "emu/ares/settings.bml")
 
     def startProcess(self, rom, *, model, required_features):
+        if model == SGB:
+            return None
         target = "emu/ares/ares-rom.gb"
         self.cgb = model == CGB
         if self.cgb:
