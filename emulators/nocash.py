@@ -19,4 +19,6 @@ class NoCash(Emulator):
 
     def getScreenshot(self):
         screenshot = getScreenshot(self.title_check)
+        if screenshot.size[0] == 256: # SGB
+            return screenshot.crop((48, 40, 48 + 160, 40 + 144))
         return screenshot.crop((80, 34, 80 + 160, 34 + 144))
