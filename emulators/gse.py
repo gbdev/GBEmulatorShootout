@@ -10,8 +10,7 @@ class GSE(Emulator):
         self.title_check = lambda title: "GSE" in title
 
     def setup(self):
-        # downloadGithubRelease("CasualPokePlayer/GSE", "downloads/GSE.zip", filter=lambda n: "win-x64" in n and n.endswith(".zip"))
-        download("https://nightly.link/CasualPokePlayer/GSE/actions/runs/26384002488/GSE-win-x64.zip", "downloads/GSE.zip")
+        downloadGithubRelease("CasualPokePlayer/GSE", "downloads/GSE.zip", filter=lambda n: "win-x64" in n and n.endswith(".zip"))
         extract("downloads/GSE.zip", "emu/GSE")
         download("https://gbdev.gg8.se/files/roms/bootroms/cgb_boot.bin", "emu/GSE/cgb_boot.bin")
         download("https://gbdev.gg8.se/files/roms/bootroms/dmg_boot.bin", "emu/GSE/dmg_boot.bin")
