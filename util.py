@@ -108,6 +108,19 @@ def findWindow(title_check):
         return results[0]
     return None
 
+def disableRoundCorners(hwnd):
+    import ctypes
+    DWMWA_WINDOW_CORNER_PREFERENCE = 33
+    DWMWCP_DONOTROUND = 1
+
+    pref = ctypes.c_int(DWMWCP_DONOTROUND)
+    ctypes.windll.dwmapi.DwmSetWindowAttribute(
+        hwnd,
+        DWMWA_WINDOW_CORNER_PREFERENCE,
+        ctypes.byref(pref),
+        ctypes.sizeof(pref)
+    )
+
 def getScreenshot(title_check):
     import win32gui
     hwnd = findWindow(title_check)
@@ -119,6 +132,8 @@ def getScreenshot(title_check):
                 print(hwnd, title)
         win32gui.EnumWindows(f, None)
         return None
+    
+    disableRoundCorners(hwnd)
     rect = win32gui.GetClientRect(hwnd)
     position = win32gui.ClientToScreen(hwnd, (rect[0], rect[1]))
     return pyautogui.screenshot(region=(position[0], position[1], rect[2], rect[3]))
