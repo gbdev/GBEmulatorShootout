@@ -109,6 +109,8 @@ def findWindow(title_check):
     return None
 
 def disableRoundCorners(hwnd):
+    # DWM API call to disable rounded corners on Windows 11
+    # Avoids modifying system DLLs globally (see issue https://github.com/gbdev/GBEmulatorShootout/issues/49)
     import ctypes
     DWMWA_WINDOW_CORNER_PREFERENCE = 33
     DWMWCP_DONOTROUND = 1
