@@ -1,0 +1,18 @@
+name: CI - WATaBoy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    uses: ./.github/workflows/emulator-runner.yml
+    with:
+      emulator: WATaBoy
+      needs_audio: false
+
+  deploy-pages:
+    needs: run
+    uses: ./.github/workflows/deploy-pages.yml

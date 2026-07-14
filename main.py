@@ -162,6 +162,12 @@ EMULATOR_SPECS = [
         'name': "GSE",
         'url': "https://github.com/CasualPokePlayer/GSE",
     },
+    {
+        'factory': lambda: _new_instance("emulators.wataboy", "WATaBoy"),
+        'keywords': ["WATaBoy", "wataboy"],
+        'name': "WATaBoy",
+        'url': "https://github.com/EnergeticBark/WATaBoy",
+    },
 ]
 
 
