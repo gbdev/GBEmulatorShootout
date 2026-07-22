@@ -127,6 +127,12 @@ EMULATOR_SPECS = [
         'url': "https://github.com/binji/binjgb",
     },
     {
+        'factory': lambda: _new_instance("emulators.coffeegb", "CoffeeGB"),
+        'keywords': ["Coffee GB", "coffee-gb", "coffeegb"],
+        'name': "Coffee GB",
+        'url': "https://github.com/trekawek/coffee-gb",
+    },
+    {
         'factory': lambda: _new_instance("emulators.pyboy", "PyBoy"),
         'keywords': ["PyBoy", "pyboy"],
         'name': "PyBoy",

@@ -14,6 +14,10 @@ on:
         required: false
         type: boolean
         default: true
+      needs_java:
+        required: false
+        type: boolean
+        default: false
       extra_requirements:
         required: false
         type: string
@@ -27,6 +31,13 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
+
+      - name: Install Java
+        if: ${{ inputs.needs_java }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
 
       - name: Install base Python requirements
         run: |

@@ -24,6 +24,7 @@ If you'd like to contribute to the project, please read [CONTRIBUTING.md](CONTRI
 - [Beaten Dying Moon](https://mattcurrie.com/bdm-demo/)
 - [BGB](https://bgb.bircd.org/)
 - [binjgb](https://github.com/binji/binjgb)
+- [Coffee GB](https://github.com/trekawek/coffee-gb)
 - [DocBoy](https://github.com/Docheinstein/docboy)
 - [Emmy](https://emmy.n1ark.com/)
 - [Emulicious](https://emulicious.net/)
@@ -42,6 +43,7 @@ If you'd like to contribute to the project, please read [CONTRIBUTING.md](CONTRI
 
 - Windows (for running most emulators)
 - Python 3.7+
+- Java 16+ (for Coffee GB)
 
 ## Usage
 
