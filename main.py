@@ -162,6 +162,12 @@ EMULATOR_SPECS = [
         'name': "GSE",
         'url': "https://github.com/CasualPokePlayer/GSE",
     },
+    {
+        'factory': lambda: _new_instance("emulators.masquerade", "Masquerade"),
+        'keywords': ["Masquerade Emulator", "Masquerade", "masquerade"],
+        'name': "Masquerade",
+        'url': "https://kotambail-hegde.github.io/Masquerade-Emulator/",
+    },
 ]
 
 
