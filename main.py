@@ -162,6 +162,12 @@ EMULATOR_SPECS = [
         'name': "GSE",
         'url': "https://github.com/CasualPokePlayer/GSE",
     },
+    {
+        'factory': lambda: _new_instance("emulators.gbcycle", "GbCycle"),
+        'keywords': ["gb-cycle", "gbcycle"],
+        'name': "gb-cycle",
+        'url': "https://github.com/pakitovic/gb-cycle",
+    },
 ]
 
 
