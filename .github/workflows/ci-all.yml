@@ -60,6 +60,11 @@ jobs:
             needs_chromedriver: false
             needs_audio: true
             extra_requirements: ''
+          - emulator: Coffee GB
+            needs_chromedriver: false
+            needs_audio: true
+            needs_java: true
+            extra_requirements: ''
           - emulator: PyBoy
             needs_chromedriver: false
             needs_audio: true
@@ -89,6 +94,7 @@ jobs:
       emulator: ${{ matrix.emulator }}
       needs_chromedriver: ${{ matrix.needs_chromedriver }}
       needs_audio: ${{ matrix.needs_audio }}
+      needs_java: ${{ matrix.needs_java || false }}
       extra_requirements: ${{ matrix.extra_requirements }}
 
   deploy-pages:

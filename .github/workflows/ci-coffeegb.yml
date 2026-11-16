@@ -1,0 +1,19 @@
+name: CI - Coffee GB
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    uses: ./.github/workflows/emulator-runner.yml
+    with:
+      emulator: Coffee GB
+      needs_audio: true
+      needs_java: true
+
+  deploy-pages:
+    needs: run
+    uses: ./.github/workflows/deploy-pages.yml
