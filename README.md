@@ -24,6 +24,7 @@ If you'd like to contribute to the project, please read [CONTRIBUTING.md](CONTRI
 - [Beaten Dying Moon](https://mattcurrie.com/bdm-demo/)
 - [BGB](https://bgb.bircd.org/)
 - [binjgb](https://github.com/binji/binjgb)
+- [CrystalWorlds](https://crystalworlds.media/) †
 - [DocBoy](https://github.com/Docheinstein/docboy)
 - [Emmy](https://emmy.n1ark.com/)
 - [Emulicious](https://emulicious.net/)

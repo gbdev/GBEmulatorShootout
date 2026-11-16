@@ -72,6 +72,10 @@ jobs:
             needs_chromedriver: true
             needs_audio: false
             extra_requirements: requirements-emmy.txt
+          - emulator: CrystalWorlds
+            needs_chromedriver: true
+            needs_audio: false
+            extra_requirements: requirements-emmy.txt
           - emulator: gameroy
             needs_chromedriver: false
             needs_audio: true
