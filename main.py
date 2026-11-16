@@ -145,6 +145,12 @@ EMULATOR_SPECS = [
         'url': "https://emmy.n1ark.com/",
     },
     {
+        'factory': lambda: _new_instance("emulators.crystalworlds", "CrystalWorlds"),
+        'keywords': ["CrystalWorlds", "crystalworlds", "CrystalWorlds.Media"],
+        'name': "CrystalWorlds",
+        'url': "https://crystalworlds.media/",
+    },
+    {
         'factory': lambda: _new_instance("emulators.gameroy", "GameRoy"),
         'keywords': ["gameroy", "GameRoy"],
         'name': "gameroy",
