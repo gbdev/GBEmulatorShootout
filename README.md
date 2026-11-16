@@ -33,6 +33,7 @@ If you'd like to contribute to the project, please read [CONTRIBUTING.md](CONTRI
 - [KiGB](http://kigb.emuunlim.com/)
 - [mGBA](https://mgba.io/)
 - [NO$GMB](https://problemkaputt.de/gmb.htm)
+- [Nubo](https://github.com/mschoenm/nubo) ‡
 - [PyBoy](https://github.com/Baekalfen/PyBoy)
 - [SameBoy](https://sameboy.github.io/)
 - [VisualBoyAdvance](https://sourceforge.net/projects/vba/)

@@ -162,6 +162,12 @@ EMULATOR_SPECS = [
         'name': "GSE",
         'url': "https://github.com/CasualPokePlayer/GSE",
     },
+    {
+        'factory': lambda: _new_instance("emulators.nubo", "Nubo"),
+        'keywords': ["Nubo", "nubo"],
+        'name': "Nubo",
+        'url': "https://github.com/mschoenm/nubo",
+    },
 ]
 
 
