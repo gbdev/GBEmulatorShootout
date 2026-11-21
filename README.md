@@ -31,6 +31,7 @@ If you'd like to contribute to the project, please read [CONTRIBUTING.md](CONTRI
 - [GameRoy](https://github.com/Rodrigodd/gameroy)
 - [Goomba Color](https://www.dwedit.org/gba/goombacolor.php)
 - [KiGB](http://kigb.emuunlim.com/)
+- [Masquerade](https://kotambail-hegde.github.io/Masquerade-Emulator/)
 - [mGBA](https://mgba.io/)
 - [NO$GMB](https://problemkaputt.de/gmb.htm)
 - [PyBoy](https://github.com/Baekalfen/PyBoy)
